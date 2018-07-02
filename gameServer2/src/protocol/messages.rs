@@ -130,8 +130,12 @@ impl GameCfg {
     }
 }
 
-impl<'a> HWProtocolMessage {
-    pub fn to_raw_protocol(&self) -> String {
+impl HWProtocolMessage {
+    /** Converts the message to a raw `String`, which can be sent over the network.
+     *
+     * This is the inverse of the `message` parser.
+     */
+    pub(crate) fn to_raw_protocol(&self) -> String {
         use self::HWProtocolMessage::*;
         match self {
             Ping => "PING\n\n".to_string(),
@@ -160,7 +164,7 @@ impl<'a> HWProtocolMessage {
                 format!("JOIN\n{}\n{}\n\n", name, arg),
             Follow(name) =>
                 format!("FOLLOW\n{}\n\n", name),
-            //Rnd(Vec<String>), ???
+            Rnd(v) => format!("CMD\nRND {}\n\n", v.join(" ")),
             Kick(name) => format!("KICK\n{}\n\n", name),
             Ban(name, reason, time) =>
                 format!("BAN\n{}\n{}\n{}\n\n", name, reason, time),
