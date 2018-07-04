@@ -78,7 +78,7 @@ pub enum HWServerMessage {
     Proto(u32),
     LobbyLeft(String, String),
     LobbyJoined(Vec<String>),
-    ChatMsg(String, String),
+    ChatMsg {nick: String, msg: String},
     ClientFlags(String, Vec<String>),
     Rooms(Vec<String>),
     RoomAdd(Vec<String>),
@@ -268,7 +268,7 @@ impl HWServerMessage {
             ForwardEngineMessage(em) =>
                 construct_message(&["EM"], &em),
             RoundFinished => msg!["ROUND_FINISHED"],
-            ChatMsg(nick, msg) => msg!["CHAT", nick, msg],
+            ChatMsg {nick, msg} => msg!["CHAT", nick, msg],
             ServerMessage(msg) => msg!["SERVER_MESSAGE", msg],
             Warning(msg) => msg!["WARNING", msg],
             Error(msg) => msg!["ERROR", msg],
